@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f7d6e0">
+<meta name="description" content="A little birthday surprise, made with all my heart.">
+<!-- REPLACE-NAME (also set CONFIG.name in the script at the bottom — it updates every name on the page) -->
+<title>Happy Birthday, Sample Name ♥</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Mono:wght@400;500&family=Playfair+Display:ital,wght@0,500;0,700;0,800;1,500;1,700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+
+<noscript>
+<style>
+  .welcome{display:none}
+  [data-reveal]{opacity:1;translate:none;scale:none}
+  .char,.hero__fade,.letter__sign{opacity:1!important;transform:none!important}
+</style>
+</noscript>
+</head>
+
+<body>
+<!-- ============ GLOBAL LAYERS ============ -->
+<div class="bg-mesh" aria-hidden="true"></div>
+<canvas id="particles-canvas" aria-hidden="true"></canvas>
+<div id="balloon-layer" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
+<canvas id="confetti-canvas" aria-hidden="true"></canvas>
+
+<!-- ============ 1. WELCOME SURPRISE POPUP ============ -->
+<div class="welcome" id="welcome" role="dialog" aria-modal="true" aria-labelledby="welcome-title">
+  <div class="floaters" id="welcome-floaters" aria-hidden="true"></div>
+  <div class="welcome__inner">
+    <p class="eyebrow">for someone very, very special</p>
+    <button class="gift" id="welcome-gift" type="button" aria-label="Open the gift">
+      <span class="gift__box"></span>
+      <span class="gift__lid"><span class="gift__bow"></span></span>
+      <span class="sparkle" style="top:-6%;left:-8%">✦</span>
+      <span class="sparkle" style="top:18%;right:-12%;animation-delay:-.7s">✦</span>
+      <span class="sparkle" style="bottom:4%;left:-14%;animation-delay:-1.3s">✧</span>
+    </button>
+    <h1 class="welcome__title" id="welcome-title">A little surprise is waiting for you...</h1>
+    <p class="welcome__text">It’s been wrapped with a whole year of love. Go on, my love, it’s all yours.</p>
+    <button class="btn btn--primary" id="welcome-open" type="button">Open the Surprise <span aria-hidden="true">🎁</span></button>
+  </div>
+</div>
+
+<!-- ============ FLOATING MUSIC PLAYER ============ -->
+<div class="music" role="group" aria-label="Background music">
+  <button class="music__heart" type="button" data-music="toggle" aria-pressed="false" aria-label="Play our song">
+    <svg class="heart-shape" viewBox="0 0 32 30" aria-hidden="true"><defs><linearGradient id="hg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#c9798a"/><stop offset="1" stop-color="#8b2252"/></linearGradient></defs><path d="M16 29 C 6 21 0 15.5 0 9 C 0 4 4 0 8.6 0 C 11.6 0 14.4 1.6 16 4.2 C 17.6 1.6 20.4 0 23.4 0 C 28 0 32 4 32 9 C 32 15.5 26 21 16 29Z" fill="url(#hg)"/></svg>
+    <span class="music__icon" data-music-icon aria-hidden="true">▶</span>
+    <span class="eq" aria-hidden="true"><i></i><i></i><i></i></span>
+  </button>
+  <button class="music__mute" type="button" data-music="mute" aria-pressed="false" aria-label="Mute"><span data-mute-icon aria-hidden="true">🔊</span></button>
+</div>
+
+<main id="main">
+  <!-- ============ 2. HERO ============ -->
+  <section class="hero" id="hero" aria-labelledby="hero-name">
+    <div class="hero__media">
+      <!-- REPLACE-VIDEO-1: assets/videos/hero.mp4 (optional poster: assets/images/poster-hero.jpg) -->
+      <video class="hero__video" autoplay muted loop playsinline preload="metadata" poster="assets/images/poster-hero.jpg" data-poster-fallback="https://picsum.photos/1080/1440?random=20" aria-hidden="true">
+        <source src="assets/videos/hero.mp4" type="video/mp4">
+        <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+      </video>
+      <div class="hero__overlay"></div>
+    </div>
+    <div class="floaters" id="hero-floaters" aria-hidden="true"></div>
+
+    <div class="hero__content">
+      <p class="eyebrow hero__fade hero__fade--1">Happy birthday to my favourite person</p>
+      <!-- REPLACE-NAME -->
+      <h1 class="hero__name" id="hero-name" data-name>Sample Name</h1>
+      <p class="hero__age hero__fade hero__fade--2">
+        Turning <strong><!-- REPLACE-AGE --><span data-age>23</span></strong>, and somehow more beautiful, more you, every single year.
+      </p>
+      <div class="hero__fade hero__fade--3">
+        <div class="foil-divider" aria-hidden="true"></div>
+        <p class="countdown__label"><span id="countdown-label">Counting down to 24 November</span><span class="cd-tick" aria-hidden="true"></span></p>
+        <div class="countdown" id="countdown" role="timer" aria-live="off">
+          <div class="cd-unit"><div class="cd-card"><span class="cd-num" data-unit="d">00</span></div><span class="cd-name">Days</span></div>
+          <div class="cd-unit"><div class="cd-card"><span class="cd-num" data-unit="h">00</span></div><span class="cd-name">Hours</span></div>
+          <div class="cd-unit"><div class="cd-card"><span class="cd-num" data-unit="m">00</span></div><span class="cd-name">Minutes</span></div>
+          <div class="cd-unit"><div class="cd-card"><span class="cd-num" data-unit="s">00</span></div><span class="cd-name">Seconds</span></div>
+        </div>
+      </div>
+      <a href="#letter" class="hero__scroll hero__fade hero__fade--4">scroll, there’s so much more <span aria-hidden="true">↓</span></a>
+    </div>
+  </section>
+
+  <!-- ============ 3. LOVE LETTER ============ -->
+  <section class="section letter" id="letter" aria-labelledby="letter-title">
+    <span class="deco" data-parallax="-0.15" style="top:6%;left:-4%" aria-hidden="true">♡</span>
+    <div class="container">
+      <header class="section__head" data-reveal>
+        <p class="eyebrow">Chapter one · a note for you</p>
+        <h2 class="section__title" id="letter-title">A letter, from my heart <em>to yours</em></h2>
+        <div class="foil-divider" aria-hidden="true"></div>
+      </header>
+
+      <article class="paper letter__card" id="letter-card" data-reveal>
+        <span class="letter__seal" aria-hidden="true">♥</span>
+        <p class="sr-only" id="letter-sr"></p>
+        <div class="letter__body" aria-hidden="true">
+          <p class="letter__ghost" id="letter-ghost"></p>
+          <p class="letter__typed" id="letter-typed"></p>
+        </div>
+        <p class="letter__sign">
+          Forever yours, always your person
+          <small>your best friend &amp; your love</small>
+          <svg viewBox="0 0 180 16" aria-hidden="true"><path d="M2 10 C 30 2, 50 14, 80 8 S 140 2, 178 9" stroke="#b76e79" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+        </p>
+      </article>
+
+      <div class="btn-row" data-reveal>
+        <button class="btn btn--primary" id="letter-more" type="button">Read my full letter <span aria-hidden="true">💌</span></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 4. PHOTO CAROUSEL + SLIDERS ============ -->
+  <section class="section photos" id="photos" aria-labelledby="photos-title">
+    <span class="deco" data-parallax="0.2" style="top:10%;right:-3%" aria-hidden="true">✿</span>
+    <div class="container">
+      <header class="section__head" data-reveal>
+        <p class="eyebrow">Chapter two · frames of us</p>
+        <h2 class="section__title" id="photos-title">Moments I never <em>want to forget</em></h2>
+        <div class="foil-divider" aria-hidden="true"></div>
+        <p class="section__lede">Swipe through us. Tap any photo to see it up close.</p>
+      </header>
+
+      <!-- The 12 images below also feed the polaroid slider and the lightbox: replace them once here. -->
+      <div class="carousel" id="carousel" aria-roledescription="carousel" aria-label="Our favourite moments" data-reveal="scale">
+        <div class="carousel__viewport" tabindex="0" aria-label="Photo carousel. Use arrow keys to browse, Enter to open.">
+          <figure class="carousel__slide is-active" data-caption="That dark night">
+            <!-- REPLACE-IMAGE-1: assets/images/photo-01.jpg --><img src="assets/images/photo-01.jpg" data-fallback="https://picsum.photos/800/1000?random=1" alt="That rainy evening" draggable="false" decoding="async">
+            <figcaption>That dark night</figcaption>
+          </figure>
+          <figure class="carousel__slide" data-caption="Our first trip">
+            <!-- REPLACE-IMAGE-2: assets/images/photo-02.jpg --><img src="assets/images/photo-02.jpg" data-fallback="https://picsum.photos/800/1000?random=2" alt="Our first trip" draggable="false" loading="lazy" decoding="async">
+            <figcaption>Our first trip</figcaption>
+          </figure>
+          <figure class="carousel__slide" data-caption="The chocolate that started it all">
+            <!-- REPLACE-IMAGE-3: assets/images/photo-03.jpg --><img src="assets/images/photo-03.jpg" data-fallback="https://picsum.photos/800/1000?random=3" alt="The coffee that started it all" draggable="false" loading="lazy" decoding="async">
+            <figcaption>The chocolate that started it all</figcaption>
+          </figure>
+          <figure class="carousel__slide" data-caption="Golden hour, golden you">
+            <!-- REPLACE-IMAGE-4: assets/images/photo-04.jpg --><img src="assets/images/photo-04.jpg" data-fallback="https://picsum.photos/800/1000?random=4" alt="Golden hour, golden you" draggable="false" loading="lazy" decoding="async">
+            <figcaption>Golden hour, golden you</figcaption>
+          </figure>
+          <figure class="carousel__slide" data-caption="Happiest laughs">
+            <!-- REPLACE-IMAGE-5: assets/images/photo-05.jpg --><img src="assets/images/photo-05.jpg" data-fallback="https://picsum.photos/800/1000?random=5" alt="Midnight laughs" draggable="false" loading="lazy" decoding="async">
+            <figcaption>Happiest laughs</figcaption>
+          </figure>
+          <figure class="carousel__slide" data-caption="Sunday morning softness">
+            <!-- REPLACE-IMAGE-6: assets/images/photo-06.jpg --><img src="assets/images/photo-06.jpg" data-fallback="https://picsum.photos/800/1000?random=6" alt="Sunday morning softness" draggable="false" loading="lazy" decoding="async">
+            <figcaption>Sunday morning softness</figcaption>
+          </figure>
+          <figure class="carousel__slide" data-caption="First temple visit together">
+            <!-- REPLACE-IMAGE-7: assets/images/photo-07.jpg --><img src="assets/images/photo-07.jpg" data-fallback="https://picsum.photos/800/1000?random=7" alt="Lost in the city with you" draggable="false" loading="lazy" decoding="async">
+            <figcaption>First temple visit together</figcaption>
+          </figure>
+          <figure class="carousel__slide" data-caption="First time prayer with you">
+            <!-- REPLACE-IMAGE-8: assets/images/photo-08.jpg --><img src="assets/images/photo-08.jpg" data-fallback="https://picsum.photos/800/1000?random=8" alt="Your birthday, last year" draggable="false" loading="lazy" decoding="async">
+            <figcaption>First time prayer with you</figcaption>
+          </figure>
+          <figure class="carousel__slide" data-caption="The day you said yes">
+            <!-- REPLACE-IMAGE-9: assets/images/photo-09.jpg --><img src="assets/images/photo-09.jpg" data-fallback="https://picsum.photos/800/1000?random=9" alt="The day you said yes" draggable="false" loading="lazy" decoding="async">
+            <figcaption>The day you said yes</figcaption>
+          </figure>
+          <figure class="carousel__slide" data-caption="Beach, sunshine, us">
+            <!-- REPLACE-IMAGE-10: assets/images/photo-10.jpg --><img src="assets/images/photo-10.jpg" data-fallback="https://picsum.photos/800/1000?random=10" alt="Beach, sunset, us" draggable="false" loading="lazy" decoding="async">
+            <figcaption>Beach, sunshine, us</figcaption>
+          </figure>
+          <figure class="carousel__slide" data-caption="Silly faces, serious love">
+            <!-- REPLACE-IMAGE-11: assets/images/photo-11.jpg --><img src="assets/images/photo-11.jpg" data-fallback="https://picsum.photos/800/1000?random=11" alt="Silly faces, serious love" draggable="false" loading="lazy" decoding="async">
+            <figcaption>Silly faces, serious love</figcaption>
+          </figure>
+          <figure class="carousel__slide" data-caption="Home is wherever you are">
+            <!-- REPLACE-IMAGE-12: assets/images/photo-12.jpg --><img src="assets/images/photo-12.jpg" data-fallback="https://picsum.photos/800/1000?random=12" alt="Home is wherever you are" draggable="false" loading="lazy" decoding="async">
+            <figcaption>Home is wherever you are</figcaption>
+          </figure>
+        </div>
+        <button class="carousel__arrow carousel__arrow--prev" type="button" aria-label="Previous photo">‹</button>
+        <button class="carousel__arrow carousel__arrow--next" type="button" aria-label="Next photo">›</button>
+        <div class="carousel__dots" aria-label="Choose a photo"></div>
+        <span class="carousel__count" aria-live="polite">01 / 12</span>
+      </div>
+
+      <h3 class="sub-title" data-reveal>Our little polaroid wall</h3>
+      <p class="sub-lede" data-reveal>drag me sideways, tap one to open it ♥</p>
+    </div>
+    <div class="drag-slider" id="drag-slider" tabindex="0" aria-label="Polaroid slider. Drag or use arrow keys." data-reveal>
+      <div class="drag-slider__track"></div>
+    </div>
+  </section>
+
+  <!-- ============ 5. VIDEO MEMORIES ============ -->
+  <section class="section" id="videos" aria-labelledby="videos-title">
+    <div class="container">
+      <header class="section__head" data-reveal>
+        <p class="eyebrow">Chapter three · moving pictures</p>
+        <h2 class="section__title" id="videos-title">Little films of <em>us</em></h2>
+        <div class="foil-divider" aria-hidden="true"></div>
+        <p class="section__lede">Hover or tap a video to pause it. Tap again to bring it back to life.</p>
+      </header>
+
+      <div class="videos">
+        <figure class="video-card" data-reveal="scale">
+          <!-- REPLACE-VIDEO-2: assets/videos/featured.mp4 (optional poster: assets/images/poster-featured.jpg) -->
+          <video autoplay muted loop playsinline preload="metadata" poster="assets/images/poster-featured.jpg" data-poster-fallback="https://picsum.photos/1280/720?random=31">
+            <source src="assets/videos/featured.mp4" type="video/mp4">
+            <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+          </video>
+          <span class="video-card__state" aria-hidden="true">▶</span>
+          <button class="video-card__toggle" type="button" aria-label="Pause video"></button>
+          <figcaption><small>Featured memory</small>The way you laugh when you think no one is watching</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 6. MEMORY TIMELINE ============ -->
+  <section class="section" id="timeline" aria-labelledby="timeline-title">
+    <span class="deco" data-parallax="0.18" style="top:20%;left:-5%" aria-hidden="true">❀</span>
+    <div class="container">
+      <header class="section__head" data-reveal>
+        <p class="eyebrow">Chapter four · our story so far</p>
+        <h2 class="section__title" id="timeline-title">How you became <em>my everything</em></h2>
+        <div class="foil-divider" aria-hidden="true"></div>
+      </header>
+
+      <div class="timeline" id="timeline-list">
+        <div class="timeline__line" aria-hidden="true"><span></span></div>
+
+        <article class="tl-item" data-reveal>
+          <span class="tl-item__node" aria-hidden="true">🌊</span>
+          <div class="tl-card glass">
+            <div class="tl-card__img"><!-- REPLACE-IMAGE-13: assets/images/timeline-01.jpg --><img src="assets/images/timeline-01.jpg" data-fallback="https://picsum.photos/800/1000?random=13" alt="Our selfie on the beach with the waves behind us" loading="lazy" decoding="async"></div>
+            <div class="tl-card__body">
+              <span class="tl-card__date">Chapter 01 · where it all began</span>
+              <h3>Salt air &amp; sunshine</h3>
+              <p>Wind in your hair, the sea behind us, and that shy little smile. Of all the views on that beach, you were the only one I couldn’t stop looking at.</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="tl-item is-right" data-reveal>
+          <span class="tl-item__node" aria-hidden="true">🍫</span>
+          <div class="tl-card glass">
+            <div class="tl-card__img"><!-- REPLACE-IMAGE-14: assets/images/timeline-02.jpg --><img src="assets/images/timeline-02.jpg" data-fallback="https://picsum.photos/800/1000?random=14" alt="Her enjoying a snack next to me at the bus stand" loading="lazy" decoding="async"></div>
+            <div class="tl-card__body">
+              <span class="tl-card__date">Chapter 02 · the snack break</span>
+              <h3>Snacks before selfies</h3>
+              <p>The whole bus stand buzzing around us, and you completely focused on your snack. I’ve never been so happy to come second to a little packet of food.</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="tl-item" data-reveal>
+          <span class="tl-item__node" aria-hidden="true">🌴</span>
+          <div class="tl-card glass">
+            <div class="tl-card__img"><!-- REPLACE-IMAGE-15: assets/images/timeline-03.jpg --><img src="assets/images/timeline-03.jpg" data-fallback="https://picsum.photos/800/1000?random=15" alt="Grinning together on a golden beach lined with palm trees" loading="lazy" decoding="async"></div>
+            <div class="tl-card__body">
+              <span class="tl-card__date">Chapter 03 · palm trees &amp; golden sand</span>
+              <h3>My happiest grin</h3>
+              <p>Just look at my face. That’s what standing next to you does to me — I couldn’t stop smiling if I tried.</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="tl-item is-right" data-reveal>
+          <span class="tl-item__node" aria-hidden="true">💞</span>
+          <div class="tl-card glass">
+            <div class="tl-card__img"><!-- REPLACE-IMAGE-16: assets/images/timeline-04.jpg --><img src="assets/images/timeline-04.jpg" data-fallback="https://picsum.photos/800/1000?random=16" alt="“I love you Sagar” written in the sand with hearts" loading="lazy" decoding="async"></div>
+            <div class="tl-card__body">
+              <span class="tl-card__date">Chapter 04 · written in the sand</span>
+              <h3>I ♥ U, Sagar</h3>
+              <p>You wrote it where the waves could read it. The tide took the letters away, but I’ve kept every one of them in my heart.</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="tl-item" data-reveal>
+          <span class="tl-item__node" aria-hidden="true">🐚</span>
+          <div class="tl-card glass">
+            <div class="tl-card__img"><!-- REPLACE-IMAGE-17: assets/images/timeline-05.jpg --><img src="assets/images/timeline-05.jpg" data-fallback="https://picsum.photos/800/1000?random=17" alt="The two of us by the sea, the horizon behind us" loading="lazy" decoding="async"></div>
+            <div class="tl-card__body">
+              <span class="tl-card__date">Chapter 05 · just the two of us</span>
+              <h3>Us against the horizon</h3>
+              <p>Endless sea, endless sky, and still the best part of the whole frame was you leaning in right next to me.</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="tl-item is-right" data-reveal>
+          <span class="tl-item__node" aria-hidden="true">🎂</span>
+          <div class="tl-card glass">
+            <div class="tl-card__img"><!-- REPLACE-IMAGE-18: assets/images/timeline-06.jpg --><img src="assets/images/timeline-06.jpg" data-fallback="https://picsum.photos/800/1000?random=18" alt="My arm around you on a rainy day out" loading="lazy" decoding="async"></div>
+            <div class="tl-card__body">
+              <span class="tl-card__date">Chapter 06 · 24 November</span>
+              <h3>Today: another year of you</h3>
+              <p>Rain-kissed hair, your red flowers, my arm around your shoulder — just like this, I want to stand beside you through every year to come. Happy birthday, my love.</p>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 7. WISHES WALL ============ -->
+  <section class="section" id="wishes" aria-labelledby="wishes-title">
+    <div class="container">
+      <header class="section__head" data-reveal>
+        <p class="eyebrow">Chapter five · from everyone who loves you</p>
+        <h2 class="section__title" id="wishes-title">The wishes <em>wall</em></h2>
+        <div class="foil-divider" aria-hidden="true"></div>
+        <p class="section__lede">Your people left you little notes. Tap one to read it all.</p>
+      </header>
+
+      <div class="board" data-reveal="scale">
+        <div class="board__grid" id="wish-board"></div>
+      </div>
+
+      <form class="wish-form glass" id="wish-form" novalidate data-reveal>
+        <h3>Write a wish</h3>
+        <p>Add your own note and pin it to the wall. It stays here, just for you.</p>
+        <div class="field">
+          <label for="wish-name">Your name</label>
+          <input id="wish-name" name="name" type="text" maxlength="40" autocomplete="name" placeholder="e.g. Your secret admirer">
+        </div>
+        <div class="field">
+          <label for="wish-msg">Your wish</label>
+          <textarea id="wish-msg" name="message" maxlength="240" placeholder="Write something that will make her smile…"></textarea>
+          <div class="field__meta"><span>be sweet ♥</span><span id="wish-count">0 / 240</span></div>
+        </div>
+        <button class="btn btn--primary" type="submit">Pin it to the wall <span aria-hidden="true">📌</span></button>
+        <p class="wish-form__status" id="wish-status" role="status"></p>
+      </form>
+    </div>
+  </section>
+
+  <!-- ============ 8. BIRTHDAY CAKE ============ -->
+  <section class="section" id="cake" aria-labelledby="cake-title">
+    <span class="deco" data-parallax="-0.2" style="bottom:8%;right:-4%" aria-hidden="true">♡</span>
+    <div class="container">
+      <header class="section__head" data-reveal>
+        <p class="eyebrow">Chapter six · close your eyes</p>
+        <h2 class="section__title" id="cake-title">Make a <em>wish</em>, birthday girl</h2>
+        <div class="foil-divider" aria-hidden="true"></div>
+        <p class="section__lede">Think of something wonderful, then blow out the candles.</p>
+      </header>
+
+      <div class="cake-stage" data-reveal="scale">
+        <div class="cake" id="cake-el" aria-label="A birthday cake with five lit candles" role="img">
+          <div class="cake__candles">
+            <div class="candle" style="--i:0"><span class="candle__flame"></span><span class="candle__smoke"></span></div>
+            <div class="candle" style="--i:1"><span class="candle__flame"></span><span class="candle__smoke"></span></div>
+            <div class="candle" style="--i:2"><span class="candle__flame"></span><span class="candle__smoke"></span></div>
+            <div class="candle" style="--i:3"><span class="candle__flame"></span><span class="candle__smoke"></span></div>
+            <div class="candle" style="--i:4"><span class="candle__flame"></span><span class="candle__smoke"></span></div>
+          </div>
+          <div class="cake__tier cake__tier--top"></div>
+          <div class="cake__tier cake__tier--mid"><span class="cake__text">♥ <span data-age>23</span> ♥</span></div>
+          <div class="cake__tier cake__tier--bottom"><span class="cake__text">Happy Birthday</span></div>
+          <div class="cake__plate"></div>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn--primary" id="wish-btn" type="button">Make a Wish <span aria-hidden="true">✨</span></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 9. GAMES & SURPRISES ============ -->
+  <section class="section" id="games" aria-labelledby="games-title">
+    <div class="container">
+      <header class="section__head" data-reveal>
+        <p class="eyebrow">Chapter seven · play with me</p>
+        <h2 class="section__title" id="games-title">Games &amp; little <em>surprises</em></h2>
+        <div class="foil-divider" aria-hidden="true"></div>
+      </header>
+
+      <div class="games">
+        <div class="scratch-wrap" data-reveal>
+          <h3 class="sub-title" style="margin-top:0">Scratch to reveal your surprise</h3>
+          <p class="sub-lede">use your finger (or your mouse) like a lucky coin</p>
+          <div class="scratch" id="scratch">
+            <div class="scratch__prize">
+              <p class="eyebrow">surprise unlocked</p>
+              <p class="scratch__msg">You’re my favourite adventure. 💌<br>Dinner date this Saturday, and the table is already booked. <br>(You can’t say no.)</p>
+            </div>
+            <canvas class="scratch__canvas" aria-label="Scratch card. Drag across it to reveal a hidden message."></canvas>
+          </div>
+          <div class="scratch-actions">
+            <button class="link-btn" id="scratch-reveal" type="button">Can’t wait? Reveal it</button>
+            <button class="link-btn" id="scratch-reset" type="button">Scratch again</button>
+          </div>
+        </div>
+
+        <div data-reveal>
+          <h3 class="sub-title" style="margin-top:0">Three gifts, just for you</h3>
+          <p class="sub-lede">tap a box to pop it open</p>
+          <div class="gifts">
+            <div class="gift-item">
+              <button class="gift" type="button" data-coupon="0" aria-label="Open gift one">
+                <span class="gift__peek" aria-hidden="true">HUG</span>
+                <span class="gift__box"></span>
+                <span class="gift__lid"><span class="gift__bow"></span></span>
+              </button>
+              <span class="gift-item__label">Gift No. 1</span>
+            </div>
+            <div class="gift-item">
+              <button class="gift" type="button" data-coupon="1" aria-label="Open gift two">
+                <span class="gift__peek" aria-hidden="true">DATE</span>
+                <span class="gift__box"></span>
+                <span class="gift__lid"><span class="gift__bow"></span></span>
+              </button>
+              <span class="gift-item__label">Gift No. 2</span>
+            </div>
+            <div class="gift-item">
+              <button class="gift" type="button" data-coupon="2" aria-label="Open gift three">
+                <span class="gift__peek" aria-hidden="true">BFF</span>
+                <span class="gift__box"></span>
+                <span class="gift__lid"><span class="gift__bow"></span></span>
+              </button>
+              <span class="gift-item__label">Gift No. 3</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 10. REASONS I LOVE YOU ============ -->
+  <section class="section" id="reasons" aria-labelledby="reasons-title">
+    <div class="container">
+      <header class="section__head" data-reveal>
+        <p class="eyebrow">Chapter eight · the short list</p>
+        <h2 class="section__title" id="reasons-title">Reasons I <em>love you</em></h2>
+        <div class="foil-divider" aria-hidden="true"></div>
+        <p class="section__lede">Only twelve here, because the full list would never end. Tap a card.</p>
+      </header>
+    </div>
+
+    <div class="marquee" id="marquee" aria-label="You are my safe place, my favourite hello, my hardest goodbye, and so much more">
+      <div class="marquee__track" aria-hidden="true">
+        <div class="marquee__group">
+          <span>you are my safe place</span><span>my favourite hello</span><span>my hardest goodbye</span><span>my 3 a.m. person</span><span>my calm in every storm</span><span>my partner in crime</span><span>my home</span><span>my best decision</span><span>the best part of my day</span><span>my forever plus-one</span>
+        </div>
+        <div class="marquee__group">
+          <span>you are my safe place</span><span>my favourite hello</span><span>my hardest goodbye</span><span>my 3 a.m. person</span><span>my calm in every storm</span><span>my partner in crime</span><span>my home</span><span>my best decision</span><span>the best part of my day</span><span>my forever plus-one</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="flip-grid" id="flip-grid" data-stagger>
+        <button class="flip" type="button" aria-pressed="false" data-reveal><span class="flip__inner"><span class="flip__face flip__face--front"><span class="flip__num">No. 01</span><span class="flip__heart">♥</span><span class="flip__hint">tap me</span></span><span class="flip__face flip__face--back">The way you laugh at your own jokes before you even finish them.</span></span></button>
+        <button class="flip" type="button" aria-pressed="false" data-reveal><span class="flip__inner"><span class="flip__face flip__face--front"><span class="flip__num">No. 02</span><span class="flip__heart">♥</span><span class="flip__hint">tap me</span></span><span class="flip__face flip__face--back">You remember the tiny things I forgot I ever told you.</span></span></button>
+        <button class="flip" type="button" aria-pressed="false" data-reveal><span class="flip__inner"><span class="flip__face flip__face--front"><span class="flip__num">No. 03</span><span class="flip__heart">♥</span><span class="flip__hint">tap me</span></span><span class="flip__face flip__face--back">You turn ordinary Tuesdays into little holidays.</span></span></button>
+        <button class="flip" type="button" aria-pressed="false" data-reveal><span class="flip__inner"><span class="flip__face flip__face--front"><span class="flip__num">No. 04</span><span class="flip__heart">♥</span><span class="flip__hint">tap me</span></span><span class="flip__face flip__face--back">You’re the first person I want to tell everything to.</span></span></button>
+        <button class="flip" type="button" aria-pressed="false" data-reveal><span class="flip__inner"><span class="flip__face flip__face--front"><span class="flip__num">No. 05</span><span class="flip__heart">♥</span><span class="flip__hint">tap me</span></span><span class="flip__face flip__face--back">Your hugs fix things that words never could.</span></span></button>
+        <button class="flip" type="button" aria-pressed="false" data-reveal><span class="flip__inner"><span class="flip__face flip__face--front"><span class="flip__num">No. 06</span><span class="flip__heart">♥</span><span class="flip__hint">tap me</span></span><span class="flip__face flip__face--back">You believe in me, even on the days I don’t.</span></span></button>
+        <button class="flip" type="button" aria-pressed="false" data-reveal><span class="flip__inner"><span class="flip__face flip__face--front"><span class="flip__num">No. 07</span><span class="flip__heart">♥</span><span class="flip__hint">tap me</span></span><span class="flip__face flip__face--back">You’re kind to everyone: waiters, strangers, stray cats.</span></span></button>
+        <button class="flip" type="button" aria-pressed="false" data-reveal><span class="flip__inner"><span class="flip__face flip__face--front"><span class="flip__num">No. 08</span><span class="flip__heart">♥</span><span class="flip__hint">tap me</span></span><span class="flip__face flip__face--back">You’re my best friend and my love, in one beautiful person.</span></span></button>
+        <button class="flip" type="button" aria-pressed="false" data-reveal><span class="flip__inner"><span class="flip__face flip__face--front"><span class="flip__num">No. 09</span><span class="flip__heart">♥</span><span class="flip__hint">tap me</span></span><span class="flip__face flip__face--back">The way your eyes light up when you talk about what you love.</span></span></button>
+        <button class="flip" type="button" aria-pressed="false" data-reveal><span class="flip__inner"><span class="flip__face flip__face--front"><span class="flip__num">No. 10</span><span class="flip__heart">♥</span><span class="flip__hint">tap me</span></span><span class="flip__face flip__face--back">You never, ever let me go to bed sad.</span></span></button>
+        <button class="flip" type="button" aria-pressed="false" data-reveal><span class="flip__inner"><span class="flip__face flip__face--front"><span class="flip__num">No. 11</span><span class="flip__heart">♥</span><span class="flip__hint">tap me</span></span><span class="flip__face flip__face--back">You’re brave, even when you’re scared. Especially then.</span></span></button>
+        <button class="flip" type="button" aria-pressed="false" data-reveal><span class="flip__inner"><span class="flip__face flip__face--front"><span class="flip__num">No. 12</span><span class="flip__heart">♥</span><span class="flip__hint">tap me</span></span><span class="flip__face flip__face--back">You chose me, and you keep choosing me, every single day.</span></span></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 11. GRAND FINALE ============ -->
+  <section class="finale" id="finale" aria-labelledby="finale-title">
+    <div class="floaters" id="finale-floaters" aria-hidden="true"></div>
+    <div class="finale__content">
+      <p class="eyebrow">the grand finale</p>
+      <h2 class="finale__title" id="finale-title">
+        <span class="finale__line" data-split>Happy Birthday,</span>
+        <!-- REPLACE-NAME -->
+        <span class="finale__name" data-name data-split>Sample Name</span>
+      </h2>
+      <p class="finale__text">Here’s to you, to us, and to every birthday I get to celebrate by your side.</p>
+      <div class="btn-row">
+        <button class="btn btn--light" id="finale-btn" type="button">One last thing... <span aria-hidden="true">💗</span></button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ============ 12. FOOTER ============ -->
+<footer class="site-footer">
+  <p class="site-footer__love">Made with all my heart, just for you <span aria-hidden="true">♥</span></p>
+  <div class="btn-row">
+    <button class="btn" type="button" data-music="toggle" aria-pressed="false"><span data-music-icon aria-hidden="true">▶</span> <span class="label">Play our song</span></button>
+    <button class="btn" type="button" data-music="mute" aria-pressed="false"><span data-mute-icon aria-hidden="true">🔊</span> <span class="label">Mute</span></button>
+  </div>
+  <small>Happy birthday, <span data-name>Sample Name</span> · this year &amp; every year</small>
+  <small style="display:block;margin-top:.5rem;opacity:.7">Music: “Wholesome” by Kevin MacLeod (<a href="https://incompetech.com" target="_blank" rel="noopener">incompetech.com</a>) · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a></small>
+</footer>
+
+<!-- Floating buttons -->
+<button class="fab fab--confetti" id="fab-confetti" type="button" aria-label="Throw confetti"><span aria-hidden="true">🎉</span> Throw confetti</button>
+<button class="fab fab--top" id="to-top" type="button" aria-label="Back to top">
+  <svg viewBox="0 0 32 30" aria-hidden="true"><path d="M16 29 C 6 21 0 15.5 0 9 C 0 4 4 0 8.6 0 C 11.6 0 14.4 1.6 16 4.2 C 17.6 1.6 20.4 0 23.4 0 C 28 0 32 4 32 9 C 32 15.5 26 21 16 29Z" fill="url(#hg)"/></svg>
+  <b aria-hidden="true">↑</b>
+</button>
+
+<!-- ============ POPUP SHELL (shared by every popup) ============ -->
+<div class="popup" id="popup" hidden aria-hidden="true" role="dialog" aria-modal="true">
+  <div class="popup__backdrop" data-close></div>
+  <div class="popup__card" tabindex="-1">
+    <button class="popup__close" type="button" data-close aria-label="Close">×</button>
+    <div class="popup__body"></div>
+  </div>
+</div>
+
+<!-- ============ BACKGROUND MUSIC ============ -->
+<!-- REPLACE-MUSIC-URL: assets/music/our-song.mp3 (your love + friendship song; starts only after the first tap, never autoplays) -->
+<audio id="bg-music" loop preload="none">
+  <source src="assets/music/our-song.mp3" type="audio/mpeg">
+  <source src="https://incompetech.com/music/royalty-free/mp3-royaltyfree/Wholesome.mp3" type="audio/mpeg">
+</audio>
+
+<!-- ============ POPUP TEMPLATES ============ -->
+<template id="tpl-letter">
+  <p class="eyebrow">the long version</p>
+  <h3>My dearest <span data-name>Sample Name</span>,</h3>
+  <p>I’ve started this letter a dozen times, because how do you fit someone like you into words? I’ll try anyway.</p>
+  <p>Before you were my girlfriend, you were my best friend, and honestly, you still are. You’re the one I call when something good happens, and the one I need when something doesn’t. You know my worst jokes, my weirdest habits and my quietest fears, and somehow you still look at me like I hung the moon.</p>
+  <p>I love how you laugh with your whole face. I love how you care, loudly and fiercely, about the people you love. I love the way you hum when you think no one is listening, the way you steal my fries, and the way you hold my hand a little tighter when you’re nervous.</p>
+  <p>Falling for my best friend was the easiest thing I’ve ever done. It didn’t feel like falling, really. It felt like coming home and realising I’d been there all along.</p>
+  <p>This year, I hope you chase every dream that makes your heart race. I hope you’re gentle with yourself on the hard days and proud of yourself on all the others. And I hope you always remember that no matter where life takes us, you will never have to face anything alone.</p>
+  <p>Thank you for every midnight call, every “I’m proud of you,” every silly dance in the kitchen, and every ordinary moment you made extraordinary just by being in it.</p>
+  <p>Happy birthday, my love. My best friend. My favourite person in every room.</p>
+  <p class="popup__sign">Forever and always yours ♥</p>
+</template>
+
+<template id="tpl-cake">
+  <div class="popup__center">
+    <span class="popup__emoji" aria-hidden="true">🌠</span>
+    <p class="eyebrow">wish received</p>
+    <h3>Your wish is on its way ✨</h3>
+    <p>The candles carried it all the way up to the stars. I don’t know what you wished for, but I hope it comes true. And if it needs a little help, you know I’ll be right there making it happen.</p>
+    <p class="popup__sign" style="text-align:center">Happy birthday, <span data-name>Sample Name</span> ♥</p>
+  </div>
+</template>
+
+<template id="tpl-finale">
+  <p class="eyebrow">one last thing</p>
+  <h3>To my best friend, and the love of my life</h3>
+  <p>If you’ve scrolled all the way down here, you’ve seen the balloons and the photos, the notes and the cake, and all the little surprises. But none of it comes close to what I really want to give you.</p>
+  <p>I want to give you a lifetime of ordinary days that feel like magic. Lazy mornings and late-night talks, inside jokes nobody else gets, and a hand to hold through every storm and every sunrise.</p>
+  <p>You are the person I trust most in this world. You’re the one who makes me laugh until I can’t breathe, and the one who makes me brave enough to be myself. Loving you has been the most natural thing I’ve ever done, because you were my best friend first, and you made loving you feel like breathing.</p>
+  <p>So on your birthday, here is my promise: I’ll keep choosing you. On the easy days and the hard ones, in every version of us that’s still to come. I’ll be your cheerleader, your safe place and your partner in every adventure.</p>
+  <p>Thank you for being born. Thank you for letting me love you.</p>
+  <p class="popup__sign">Happy birthday, <span data-name>Sample Name</span>.<br>All of my heart, forever ♥</p>
+</template>
+
+<script src="script.js"></script>
+</body>
+</html>

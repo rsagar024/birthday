@@ -1,0 +1,52 @@
+name: Deploy birthday site to GitHub Pages
+
+on:
+  # A merged pull request lands on master as a push
+  push:
+    branches: [master]
+  # Allow a manual redeploy from the Actions tab
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Only one deployment at a time; let an in-progress deploy finish
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Assemble site (public files only)
+        run: |
+          set -euo pipefail
+          mkdir -p _site
+          cp index.html style.css script.js _site/
+          if [ -d assets ]; then
+            cp -R assets _site/assets
+            rm -f _site/assets/README.md
+          fi
+          echo "Publishing:"
+          find _site -type f | sort
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
